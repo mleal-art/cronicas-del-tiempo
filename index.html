@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0e0c09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Crónicas">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Crónicas del Tiempo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0e0c09;--bg2:#151210;--surface:#211d18;
+    --border:rgba(180,150,90,0.15);--gold:#c9a84c;--gold2:#e8c97a;
+    --gold3:rgba(201,168,76,0.08);--text:#e8e0d0;--text2:#a89880;--text3:#6e5e4a;
+  }
+  .light {
+    --bg:#f5f0e8;--bg2:#ede8dc;--surface:#ddd8cc;
+    --border:rgba(120,90,40,0.2);--gold:#8b6420;--gold2:#6b4a10;
+    --gold3:rgba(139,100,32,0.08);--text:#1a1208;--text2:#5a4a30;--text3:#8a7a60;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{font-family:'EB Garamond',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .4s,color .4s;overflow-x:hidden}
+
+  header{position:relative;text-align:center;padding:44px 24px 26px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,var(--bg2) 0%,transparent 100%);z-index:10}
+  .header-ornament{font-size:10px;letter-spacing:6px;color:var(--gold);font-family:'Cinzel',serif;text-transform:uppercase;margin-bottom:14px;opacity:.65}
+  header h1{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(22px,6vw,46px);font-weight:700;color:var(--gold2);letter-spacing:2px;text-shadow:0 0 40px rgba(201,168,76,.25),0 2px 4px rgba(0,0,0,.5);line-height:1.15}
+  .header-line{width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto 0}
+  .header-controls{position:absolute;top:16px;right:14px;display:flex;gap:7px;align-items:center}
+  .btn-icon{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s}
+  .btn-icon:hover,.btn-icon:active{border-color:var(--gold);color:var(--gold)}
+
+  #home-view{display:flex;flex-direction:column;align-items:center;padding:48px 20px 80px;min-height:calc(100vh - 130px)}
+  .home-date{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-bottom:40px;text-align:center}
+  .home-sections{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;max-width:920px}
+  .home-card{flex:1;min-width:190px;max-width:230px;background:var(--surface);border:1px solid var(--border);padding:30px 22px 24px;cursor:pointer;transition:all .3s;text-align:center;position:relative;overflow:hidden;user-select:none}
+  .home-card::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--gold3) 0%,transparent 60%);opacity:0;transition:opacity .3s}
+  .home-card:active::before,.home-card:hover::before{opacity:1}
+  .home-card:active,.home-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-3px)}
+  .home-card-icon{font-size:28px;margin-bottom:12px;display:block;color:var(--gold)}
+  .home-card-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  .home-card-divider{width:26px;height:1px;background:var(--border);margin:0 auto 10px}
+  .home-card-preview{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--text2);line-height:1.5;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .home-card-preview.loading-title{color:var(--text3);font-size:12px}
+  .home-card-cta{margin-top:16px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);transition:color .2s}
+  .home-card:hover .home-card-cta,.home-card:active .home-card-cta{color:var(--gold)}
+
+  .bottom-nav{display:flex;justify-content:center;gap:14px;margin-top:44px;flex-wrap:wrap}
+  .bottom-nav-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);cursor:pointer;background:none;border:1px solid var(--border);padding:9px 18px;transition:all .2s;display:flex;align-items:center;gap:7px}
+  .bottom-nav-btn:hover,.bottom-nav-btn:active{border-color:var(--gold);color:var(--gold)}
+
+  #section-view{display:none}
+  .section-topbar{display:flex;align-items:center;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--bg2);gap:12px;position:sticky;top:0;z-index:50}
+  .back-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:6px;transition:color .2s;padding:4px 0}
+  .back-btn:hover,.back-btn:active{color:var(--gold)}
+  .section-topbar-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;flex:1;text-align:center}
+  .section-topbar-spacer{width:56px}
+  .section-content{max-width:860px;margin:0 auto;padding:36px 18px 80px}
+
+  .story-card{background:var(--surface);border:1px solid var(--border);overflow:hidden;margin-bottom:22px}
+  .story-card-inner{padding:28px 32px}
+  @media(max-width:500px){.story-card-inner{padding:20px 18px}}
+  .story-card-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:7px}
+  .story-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:3px 9px;border:1px solid var(--border);color:var(--gold)}
+  .story-date{font-size:12px;color:var(--text3);font-style:italic}
+  .story-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,32px);font-weight:500;color:var(--text);line-height:1.25;margin-bottom:6px}
+  .story-subtitle{font-size:14px;color:var(--text2);font-style:italic;margin-bottom:16px}
+  .story-excerpt{font-size:16px;line-height:1.82;color:var(--text2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .story-actions{display:flex;gap:9px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);align-items:center;flex-wrap:wrap}
+  .btn-read{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:10px 20px;background:transparent;border:1px solid var(--gold);color:var(--gold);cursor:pointer;transition:all .25s}
+  .btn-read:hover,.btn-read:active{background:var(--gold);color:var(--bg)}
+  .btn-fav{background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;padding:9px 12px;font-size:14px;transition:all .2s}
+  .btn-fav:hover,.btn-fav.active{border-color:#c0392b;color:#c0392b}
+  .btn-new{margin-left:auto;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:9px 14px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all .25s}
+  .btn-new:hover,.btn-new:active{border-color:var(--gold);color:var(--gold)}
+
+  .loading-state{padding:56px 36px;text-align:center}
+  .loading-spinner{width:34px;height:34px;border:1px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-style:italic;color:var(--text2);font-size:15px}
+  .loading-sub{font-size:12px;color:var(--text3);margin-top:5px;letter-spacing:1px}
+
+  #reader-view{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;animation:fadeIn .3s ease;-webkit-overflow-scrolling:touch}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .reader-header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+  .reader-back{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text2);cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:6px;transition:color .2s;padding:4px 0}
+  .reader-back:hover,.reader-back:active{color:var(--gold)}
+  .reader-progress{font-size:11px;color:var(--text3);font-style:italic}
+  .reader-fav-btn{background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;padding:6px 11px;font-size:14px;transition:all .2s}
+  .reader-fav-btn:hover,.reader-fav-btn.active{border-color:#c0392b;color:#c0392b}
+  .reader-body{max-width:680px;margin:0 auto;padding:52px 24px 100px}
+  .reader-category{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .reader-category::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+  .reader-title{font-family:'Cinzel Decorative','Cormorant Garamond',serif;font-size:clamp(20px,4.5vw,38px);font-weight:700;line-height:1.18;color:var(--text);margin-bottom:12px}
+  .reader-subtitle{font-size:16px;color:var(--text2);font-style:italic;margin-bottom:32px;line-height:1.5}
+  .reader-hero-img{width:100%;max-height:360px;object-fit:cover;margin-bottom:32px;border:1px solid var(--border);display:block}
+  .reader-hero-img.hidden{display:none}
+  .reader-content{font-size:18px;line-height:1.92;color:var(--text)}
+  .reader-content p{margin-bottom:1.5em;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+  .reader-content p:first-child::first-letter{font-family:'Cinzel Decorative','Cinzel',serif;font-size:3.8em;float:left;line-height:.8;padding-right:10px;padding-top:8px;color:var(--gold)}
+  .reader-inline-img{width:100%;max-height:280px;object-fit:cover;margin:2em 0 .4em;border:1px solid var(--border)}
+  .reader-img-caption{font-size:12px;color:var(--text3);text-align:center;font-style:italic;margin-bottom:2em}
+  .reader-reference{margin-top:3em;padding:20px 24px;border-left:2px solid var(--gold);background:var(--gold3);font-style:italic;color:var(--text2);font-size:15px}
+  .reader-reference strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;display:block;margin-bottom:5px}
+  .did-you-know{margin-top:3em;padding:24px;border:1px solid var(--border);background:var(--surface);position:relative}
+  .did-you-know::before{content:'✦';position:absolute;top:-10px;left:20px;background:var(--bg);padding:0 8px;color:var(--gold);font-size:12px}
+  .did-you-know-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:9px}
+  .did-you-know p{font-size:15px;color:var(--text2);font-style:italic;line-height:1.7;margin:0}
+  .reader-end-ornament{text-align:center;margin-top:46px;color:var(--text3);font-size:18px;letter-spacing:14px}
+
+  .grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:6px}
+  .grid-card{background:var(--surface);border:1px solid var(--border);padding:20px;cursor:pointer;transition:all .25s}
+  .grid-card:hover,.grid-card:active{border-color:rgba(201,168,76,.3);transform:translateY(-2px)}
+  .grid-card-tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:9px}
+  .grid-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--text);line-height:1.3;margin-bottom:5px}
+  .grid-card-sub{font-size:13px;color:var(--text2);font-style:italic}
+  .grid-card-date{font-size:11px;color:var(--text3);margin-top:9px}
+  .empty-state{text-align:center;padding:64px 20px;color:var(--text3)}
+  .empty-state .empty-icon{font-size:42px;margin-bottom:14px;opacity:.35}
+  .empty-state p{font-style:italic;font-size:16px}
+
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--gold);color:var(--text);padding:10px 22px;font-size:13px;font-style:italic;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;max-width:90vw}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  #install-banner{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--gold);padding:14px 20px;z-index:500;align-items:center;gap:14px}
+  #install-banner.visible{display:flex}
+  .install-text{flex:1;font-size:14px;color:var(--text2);font-style:italic}
+  .install-text strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px}
+  .install-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:9px 16px;border:1px solid var(--gold);color:var(--gold);background:none;cursor:pointer;white-space:nowrap}
+  .install-dismiss{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-controls">
+    <button class="btn-icon" id="fullscreen-btn" title="Pantalla completa">⛶</button>
+    <button class="btn-icon" id="theme-toggle" title="Cambiar tema">☀</button>
+  </div>
+  <div class="header-ornament">✦ &nbsp; Relatos del Pasado &nbsp; ✦</div>
+  <h1>Crónicas del Tiempo</h1>
+  <div class="header-line"></div>
+</header>
+
+<div id="home-view">
+  <div class="home-date" id="home-date"></div>
+  <div class="home-sections">
+    <div class="home-card" onclick="openSection('bible')">
+      <span class="home-card-icon">✝</span>
+      <div class="home-card-label">Escrituras</div>
+      <div class="home-card-divider"></div>
+      <div class="home-card-preview loading-title" id="preview-bible">Consultando los textos...</div>
+      <div class="home-card-cta">Leer historia →</div>
+    </div>
+    <div class="home-card" onclick="openSection('argentina')">
+      <span class="home-card-icon">☽</span>
+      <div class="home-card-label">Argentina</div>
+      <div class="home-card-divider"></div>
+      <div class="home-card-preview loading-title" id="preview-argentina">Consultando los archivos...</div>
+      <div class="home-card-cta">Leer historia →</div>
+    </div>
+    <div class="home-card" onclick="openSection('world')">
+      <span class="home-card-icon">◎</span>
+      <div class="home-card-label">El Mundo</div>
+      <div class="home-card-divider"></div>
+      <div class="home-card-preview loading-title" id="preview-world">Consultando los archivos...</div>
+      <div class="home-card-cta">Leer historia →</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="bottom-nav-btn" onclick="openSection('favorites')">♥ &nbsp;Favoritos</button>
+    <button class="bottom-nav-btn" onclick="openSection('history')">◈ &nbsp;Archivo</button>
+  </div>
+</div>
+
+<div id="section-view">
+  <div class="section-topbar">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <div class="section-topbar-title" id="section-topbar-title"></div>
+    <div class="section-topbar-spacer"></div>
+  </div>
+  <div class="section-content" id="section-content"></div>
+</div>
+
+<div id="reader-view">
+  <div class="reader-header">
+    <button class="reader-back" onclick="closeReader()">← VOLVER</button>
+    <span class="reader-progress" id="reader-progress"></span>
+    <button class="reader-fav-btn" id="reader-fav-btn" onclick="toggleReaderFav()">♥</button>
+  </div>
+  <div class="reader-body" id="reader-body"></div>
+</div>
+
+<div id="install-banner">
+  <div class="install-text"><strong>Instalar app</strong><br>Agregá Crónicas a tu pantalla de inicio</div>
+  <button class="install-btn" id="install-btn">Instalar</button>
+  <button class="install-dismiss" onclick="dismissInstall()">✕</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GEMINI_KEY = 'AIzaSyDOFz7EC1vYynYkeDs4N9SvJY_3kjeqBmw';
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
+
+let state = {
+  stories:  { bible:null, argentina:null, world:null },
+  previews: { bible:null, argentina:null, world:null },
+  favorites: [],
+  history:   [],
+  currentStory: null,
+  theme: 'dark'
+};
+
+(function loadState() {
+  try {
+    const raw = localStorage.getItem('cronicas_v4');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    state.favorites = s.favorites || [];
+    state.history   = s.history   || [];
+    state.theme     = s.theme     || 'dark';
+    if (s.date === new Date().toDateString()) {
+      state.stories  = s.stories  || state.stories;
+      state.previews = s.previews || state.previews;
+    }
+  } catch(e) {}
+})();
+
+function save() {
+  try {
+    localStorage.setItem('cronicas_v4', JSON.stringify({
+      date: new Date().toDateString(),
+      stories: state.stories, previews: state.previews,
+      favorites: state.favorites, history: state.history, theme: state.theme
+    }));
+  } catch(e) {}
+}
+
+// TEMA
+if (state.theme === 'light') { document.body.classList.add('light'); document.getElementById('theme-toggle').textContent = '☾'; }
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  document.body.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = state.theme === 'light' ? '☾' : '☀';
+  save();
+});
+
+// PANTALLA COMPLETA
+document.getElementById('fullscreen-btn').addEventListener('click', () => {
+  if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+  else { document.exitFullscreen && document.exitFullscreen(); }
+});
+document.addEventListener('fullscreenchange', () => {
+  document.getElementById('fullscreen-btn').textContent = document.fullscreenElement ? '⊡' : '⛶';
+});
+
+// FECHA
+const d = new Date();
+const ds = d.toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+document.getElementById('home-date').textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
+
+// GEMINI CALL
+async function callGemini(prompt, isJson) {
+  const body = {
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: {
+      temperature: 0.9,
+      maxOutputTokens: 2048,
+      ...(isJson ? { responseMimeType: 'application/json' } : {})
+    }
+  };
+  const res = await fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gemini error ${res.status}: ${err.substring(0,200)}`);
+  }
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Respuesta vacía de Gemini');
+  return text.trim();
+}
+
+// TÍTULO PREVIEWS
+const titlePrompts = {
+  bible:     'Responde SOLO con el título de una historia bíblica poco conocida para hoy. Sin comillas ni explicaciones. Ejemplo: La profetisa Débora y la batalla del Cisón',
+  argentina: 'Responde SOLO con el título de un hecho histórico argentino fascinante para hoy. Sin comillas. Ejemplo: El combate de Vuelta de Obligado, 1845',
+  world:     'Responde SOLO con el título de una historia fascinante para hoy: puede ser histórica mundial O de tecnología y negocios (marca icónica, inventor, rivalidad de empresas). Sin comillas. Ejemplo: El día que IBM perdió el control de la PC'
+};
+
+async function loadPreview(type) {
+  const el = document.getElementById('preview-' + type);
+  if (state.previews[type]) {
+    el.textContent = state.previews[type];
+    el.classList.remove('loading-title');
+    return;
+  }
+  try {
+    const title = await callGemini(titlePrompts[type], false);
+    const clean = title.replace(/^["'«»\-\*]+|["'«»\-\*]+$/g,'').trim();
+    state.previews[type] = clean;
+    save();
+    el.textContent = clean;
+    el.classList.remove('loading-title');
+  } catch(e) {
+    el.textContent = 'Historia del día';
+    el.classList.remove('loading-title');
+    console.error('Preview error:', e);
+  }
+}
+
+loadPreview('bible');
+loadPreview('argentina');
+loadPreview('world');
+
+// NAVEGACIÓN
+function goHome() {
+  document.getElementById('home-view').style.display  = 'flex';
+  document.getElementById('section-view').style.display = 'none';
+  document.getElementById('reader-view').style.display  = 'none';
+  document.body.style.overflow = '';
+}
+function openSection(type) {
+  document.getElementById('home-view').style.display    = 'none';
+  document.getElementById('section-view').style.display = 'block';
+  document.getElementById('reader-view').style.display  = 'none';
+  const labels = { bible:'✝ Escrituras', argentina:'☽ Argentina', world:'◎ El Mundo', favorites:'♥ Favoritos', history:'◈ Archivo' };
+  document.getElementById('section-topbar-title').textContent = labels[type] || type;
+  const content = document.getElementById('section-content');
+  if (type === 'favorites') { renderGrid(state.favorites, content, '♡', 'Todavía no guardaste historias como favoritas.'); return; }
+  if (type === 'history')   { renderGrid(dedup(state.history), content, '◈', 'Tu archivo está vacío.'); return; }
+  if (state.stories[type]) { renderCard(type, state.stories[type], content); }
+  else { generateStory(type, content); }
+}
+
+// PROMPTS HISTORIA COMPLETA
+const storyPrompts = {
+  bible: `Eres un narrador experto en textos bíblicos. Narra UNA historia de la Biblia POCO CONOCIDA (evita Noé, David y Goliat, Moisés cruzando el mar). Responde ÚNICAMENTE con un objeto JSON válido, sin texto antes ni después, sin markdown:
+{"title":"título evocador","subtitle":"Referencia bíblica (ej: Jueces 4:1-24)","book":"libro y capítulos","imageQuery":"3-4 palabras en inglés para buscar imagen en Wikipedia","didYouKnow":"dato curioso poco conocido","content":"Historia completa en prosa. Párrafos separados por dos saltos de línea. Mínimo 700 palabras. Sin asteriscos ni markdown. Protagonistas, contexto histórico, desarrollo y desenlace. Lenguaje claro y apasionante."}`,
+
+  argentina: `Eres un historiador especialista en Argentina. Narra UNA historia histórica argentina fascinante y poco conocida (batalla, personaje olvidado, hecho político, guerra civil, exploración). Responde ÚNICAMENTE con JSON válido, sin texto antes ni después:
+{"title":"título evocador","subtitle":"Año o período histórico","period":"año o período exacto","imageQuery":"3-4 palabras en inglés para buscar imagen en Wikipedia","didYouKnow":"dato curioso y sorprendente","content":"Historia completa en prosa. Párrafos separados por dos saltos de línea. Mínimo 700 palabras. Sin asteriscos ni markdown. Protagonistas, contexto, desarrollo y consecuencias. Lenguaje claro y apasionante."}`,
+
+  world: `Eres un narrador histórico universal. Narra UNA historia fascinante eligiendo entre: guerras épicas, caídas de imperios, revoluciones, personajes extraordinarios, O historia de tecnología (origen de marcas como Apple, IBM, Samsung, Google, Microsoft, Sony, Nintendo, Kodak, Nokia; rivalidades entre empresas; inventos revolucionarios; fracasos épicos de productos; visionarios). No argentina, no bíblica. Responde ÚNICAMENTE con JSON válido, sin texto antes ni después:
+{"title":"título evocador","subtitle":"Contexto: lugar, empresa o período","period":"período o año exacto","civilization":"nación, empresa o civilización protagonista","imageQuery":"3-4 palabras en inglés para buscar imagen en Wikipedia","didYouKnow":"dato curioso y sorprendente","content":"Historia completa en prosa. Párrafos separados por dos saltos de línea. Mínimo 700 palabras. Sin asteriscos ni markdown. Protagonistas, contexto, conflictos y consecuencias. Lenguaje claro y apasionante."}`
+};
+
+// GENERAR HISTORIA
+async function generateStory(type, container) {
+  container.innerHTML = `<div class="story-card"><div class="loading-state">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Consultando los archivos del tiempo...</div>
+    <div class="loading-sub">Preparando tu historia de hoy</div>
+  </div></div>`;
+
+  try {
+    const raw = await callGemini(storyPrompts[type], true);
+    let jsonStr = raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+    let story;
+    try { story = JSON.parse(jsonStr); }
+    catch(pe) {
+      const match = jsonStr.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('Respuesta inválida. Por favor reintentá.');
+      story = JSON.parse(match[0]);
+    }
+
+    story.type = type;
+    story.id   = Date.now() + '_' + type;
+    story.dateGenerated = new Date().toLocaleDateString('es-AR', { day:'numeric', month:'long', year:'numeric' });
+    story.image = await fetchWikiImage(story.imageQuery || story.title);
+
+    state.stories[type] = story;
+    if (!state.history.find(h => h.title === story.title)) {
+      state.history.unshift(mini(story));
+      if (state.history.length > 60) state.history = state.history.slice(0,60);
+    }
+    save();
+    renderCard(type, story, container);
+
+  } catch(e) {
+    console.error('generateStory error:', e);
+    container.innerHTML = `<div class="story-card"><div class="loading-state">
+      <div style="font-size:28px;margin-bottom:12px;opacity:.4">✦</div>
+      <div class="loading-text">No se pudo cargar la historia</div>
+      <div style="font-size:11px;color:var(--text3);margin:8px 0 18px;font-family:monospace">${e.message}</div>
+      <button class="btn-read" style="margin:0 auto;display:block" onclick="generateStory('${type}', document.getElementById('section-content'))">Reintentar</button>
+    </div></div>`;
+  }
+}
+
+// IMAGEN WIKIPEDIA
+async function fetchWikiImage(query) {
+  if (!query) return null;
+  try {
+    const s = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=3&format=json&origin=*`);
+    const sd = await s.json();
+    for (const r of (sd.query?.search || [])) {
+      const p = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(r.title)}&prop=pageimages&pithumbsize=900&format=json&origin=*`);
+      const pd = await p.json();
+      const img = Object.values(pd.query?.pages||{})[0]?.thumbnail?.source;
+      if (img) return img;
+    }
+  } catch(e) {}
+  return null;
+}
+
+// RENDER CARD
+function renderCard(type, story, container) {
+  const isFav = state.favorites.some(f => f.id === story.id);
+  const labels = { bible:'✝ Escrituras', argentina:'☽ Argentina', world:'◎ El Mundo' };
+  const excerpt = story.content.substring(0,260).replace(/\n/g,' ') + '...';
+  container.innerHTML = `
+    <div class="story-card">
+      ${story.image ? `<img src="${story.image}" alt="" style="width:100%;max-height:280px;object-fit:cover;display:block;border-bottom:1px solid var(--border)" onerror="this.style.display='none'">` : ''}
+      <div class="story-card-inner">
+        <div class="story-card-meta">
+          <span class="story-tag">${labels[type]}</span>
+          <span class="story-date">${story.dateGenerated}</span>
+        </div>
+        <div class="story-title">${story.title}</div>
+        <div class="story-subtitle">${story.subtitle}</div>
+        <div class="story-excerpt">${excerpt}</div>
+        <div class="story-actions">
+          <button class="btn-read" onclick="openReader('${type}')">Leer Historia</button>
+          <button class="btn-fav ${isFav?'active':''}" onclick="toggleFavCard('${type}')">♥</button>
+          <button class="btn-new" onclick="clearAndGenerate('${type}')">↻ Nueva</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function clearAndGenerate(type) {
+  state.stories[type]=null; state.previews[type]=null; save();
+  generateStory(type, document.getElementById('section-content'));
+}
+
+// READER
+function openReader(type) { const s = state.stories[type]; if(s) renderReader(s); }
+function renderReader(story) {
+  state.currentStory = story;
+  const isFav = state.favorites.some(f => f.id === story.id);
+  const labels = { bible:'✝ Escrituras', argentina:'☽ Argentina', world:'◎ El Mundo' };
+  const paras = story.content.split(/\n\n+/).filter(p => p.trim());
+  let html = '';
+  paras.forEach((p,i) => {
+    if (i===2 && story.image) html += `<img src="${story.image}" alt="" class="reader-inline-img" onerror="this.style.display='none'"><div class="reader-img-caption">${story.subtitle}</div>`;
+    html += `<p>${p.trim()}</p>`;
+  });
+  const refBlock = story.book
+    ? `<div class="reader-reference"><strong>Referencia Bíblica</strong>${story.book}</div>`
+    : story.period
+    ? `<div class="reader-reference"><strong>${story.type==='argentina'?'Período Histórico':'Contexto'}</strong>${story.period}${story.civilization?' · '+story.civilization:''}</div>`
+    : '';
+  document.getElementById('reader-body').innerHTML = `
+    <div class="reader-category">${labels[story.type]||story.type}</div>
+    <h1 class="reader-title">${story.title}</h1>
+    <div class="reader-subtitle">${story.subtitle}</div>
+    ${story.image?`<img src="${story.image}" alt="" class="reader-hero-img" onerror="this.classList.add('hidden')">` : ''}
+    <div class="reader-content">${html}</div>
+    ${refBlock}
+    ${story.didYouKnow?`<div class="did-you-know"><div class="did-you-know-label">¿Sabías que...?</div><p>${story.didYouKnow}</p></div>`:''}
+    <div class="reader-end-ornament">✦ ✦ ✦</div>`;
+  document.getElementById('reader-fav-btn').classList.toggle('active', isFav);
+  document.getElementById('reader-progress').textContent = story.dateGenerated;
+  document.getElementById('reader-view').style.display = 'block';
+  document.getElementById('reader-view').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeReader() { document.getElementById('reader-view').style.display='none'; document.body.style.overflow=''; }
+
+// FAVORITOS
+function toggleReaderFav() {
+  if (!state.currentStory) return;
+  const s = state.currentStory;
+  const isFav = state.favorites.some(f => f.id===s.id);
+  if (isFav) { state.favorites=state.favorites.filter(f=>f.id!==s.id); document.getElementById('reader-fav-btn').classList.remove('active'); showToast('Eliminado de favoritos'); }
+  else { state.favorites.unshift(full(s)); document.getElementById('reader-fav-btn').classList.add('active'); showToast('Guardado en favoritos ♥'); }
+  save();
+}
+function toggleFavCard(type) {
+  const story = state.stories[type]; if (!story) return;
+  const isFav = state.favorites.some(f => f.id===story.id);
+  if (isFav) { state.favorites=state.favorites.filter(f=>f.id!==story.id); showToast('Eliminado de favoritos'); }
+  else { state.favorites.unshift(full(story)); showToast('Guardado en favoritos ♥'); }
+  save();
+  renderCard(type, story, document.getElementById('section-content'));
+}
+
+// GRID
+function renderGrid(items, container, emptyIcon, emptyText) {
+  if (!items.length) { container.innerHTML=`<div class="empty-state"><div class="empty-icon">${emptyIcon}</div><p>${emptyText}</p></div>`; return; }
+  const labels = { bible:'✝ Escrituras', argentina:'☽ Argentina', world:'◎ El Mundo' };
+  container.innerHTML = `<div class="grid-view">${items.map(s=>`
+    <div class="grid-card" onclick='openArchiveStory(${JSON.stringify(s.id)})'>
+      <div class="grid-card-tag">${labels[s.type]||s.type}</div>
+      <div class="grid-card-title">${s.title}</div>
+      <div class="grid-card-sub">${s.subtitle||''}</div>
+      <div class="grid-card-date">${s.dateGenerated||''}</div>
+    </div>`).join('')}</div>`;
+}
+function openArchiveStory(id) {
+  for (const t of ['bible','argentina','world']) { if(state.stories[t]?.id===id){renderReader(state.stories[t]);return;} }
+  const fav=state.favorites.find(f=>f.id===id); if(fav){renderReader(fav);return;}
+  const h=state.history.find(h=>h.id===id); if(h){renderReader(h);return;}
+}
+
+// UTILS
+function mini(s){return{id:s.id,type:s.type,title:s.title,subtitle:s.subtitle,dateGenerated:s.dateGenerated,image:s.image,content:s.content.substring(0,300)+'...',didYouKnow:s.didYouKnow,book:s.book,period:s.period,civilization:s.civilization};}
+function full(s){return{id:s.id,type:s.type,title:s.title,subtitle:s.subtitle,dateGenerated:s.dateGenerated,image:s.image,content:s.content,didYouKnow:s.didYouKnow,book:s.book,period:s.period,civilization:s.civilization};}
+function dedup(arr){return arr.filter((s,i,a)=>a.findIndex(x=>x.title===s.title)===i);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+
+// PWA INSTALL
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!localStorage.getItem('install_dismissed'))document.getElementById('install-banner').classList.add('visible');});
+document.getElementById('install-btn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const{outcome}=await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('install-banner').classList.remove('visible');if(outcome==='accepted')showToast('¡App instalada!');});
+function dismissInstall(){localStorage.setItem('install_dismissed','1');document.getElementById('install-banner').classList.remove('visible');}
+
+// SERVICE WORKER
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>
