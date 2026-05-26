@@ -75,7 +75,7 @@ header h1{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(22px,6v
 .reader-content{font-size:18px;line-height:1.92;color:var(--text)}
 .reader-content p{margin-bottom:1.5em;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
 .reader-content p:first-child::first-letter{font-family:'Cinzel Decorative','Cinzel',serif;font-size:3.8em;float:left;line-height:.8;padding-right:10px;padding-top:8px;color:var(--gold)}
-.reader-inline-img{width:100%;max-height:280px;object-fit:cover;margin:2em 0 .4em;border:1px solid var(--border)}
+.reader-inline-img{width:100%;max-height:320px;object-fit:cover;margin:2em 0 .4em;border:1px solid var(--border);display:block}
 .reader-img-caption{font-size:12px;color:var(--text3);text-align:center;font-style:italic;margin-bottom:2em}
 .reader-reference{margin-top:3em;padding:20px 24px;border-left:2px solid var(--gold);background:var(--gold3);font-style:italic;color:var(--text2);font-size:15px}
 .reader-reference strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;display:block;margin-bottom:5px}
@@ -174,105 +174,74 @@ header h1{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(22px,6v
 <div class="toast" id="toast"></div>
 
 <script>
+// BASE DE DATOS ENRIQUECIDA CON HISTORIAS REALES E IMÁGENES ESTÉTICAS DE ALTA CALIDAD
 var ALL_STORIES = [
   {
     id:"b1",
     type:"bible",
     title:"David y Goliat",
-    subtitle:"Un joven pastor frente al gigante",
-    content:"David era un joven pastor israelita.\n\nMientras los soldados tenían miedo, él decidió enfrentar a Goliat armado solo con una honda y piedras.\n\nLa historia quedó como símbolo de valor y confianza.",
+    subtitle:"Un joven pastor frente al gigante filisteo",
+    content:"Durante semanas, las líneas del ejército de Israel permanecieron completamente paralizadas por el terror ante los constantes desafíos de Goliat, un guerrero monumental de Gat cuya sola presencia desmoralizaba a los hombres del rey Saúl.\n\nEn medio de esa desesperanza apareció David, un joven pastor enviado por su padre para llevar provisiones a sus hermanos mayores que servían en el frente. Al escuchar las provocaciones contra su pueblo, el joven sintió una profunda indignación y decidió dar un paso al frente.\n\nRechazando la pesada armadura del rey por resultarle incómoda, David recogió cinco piedras lisas de un arroyo cercano y marchó al campo de batalla armado únicamente con su cayado y una honda de cuero. Ante las burlas del gigante, David demostró una precisión quirúrgica letal arrojando una sola piedra que impactó de lleno en la frente de Goliat, derribándolo al instante y cambiando para siempre el destino de la confrontación.",
     book:"1 Samuel 17",
-    didYouKnow:"La armadura de Saúl le quedaba incómoda a David y decidió no usarla.",
-    image:""
+    didYouKnow:"La honda de los pastores antiguos no era un juguete; los proyectiles alcanzaban velocidades superiores a los 100 km/h, actuando con el impacto de un arma moderna.",
+    image:"https://images.unsplash.com/photo-1608988233076-7faebc8ec17d?auto=format&fit=crop&w=1200&q=80"
   },
   {
     id:"b2",
     type:"bible",
-    title:"Noé y el arca",
-    subtitle:"La gran construcción",
-    content:"Noé recibió una misión extraordinaria.\n\nConstruyó un enorme arca para proteger a su familia y a los animales.\n\nLa historia representa obediencia y esperanza.",
+    title:"Noé y el Gran Arca",
+    subtitle:"La monumental construcción del refugio",
+    content:"En una época marcada por la degradación humana, Noé recibió instrucciones arquitectónicas extremadamente precisas para fabricar una embarcación de dimensiones gigantescas capaz de resistir el inminente cataclismo que purificaría la Tierra.\n\nHecha completamente de madera de gofer y sellada meticulosamente con brea por dentro y por fuera, la gigantesca estructura se convirtió gradualmente en un faro de advertencia silencioso para una civilización escéptica mientras Noé trabajaba día tras día.\n\nCuando las primeras nubes cubrieron el cielo, las parejas de animales de todas las especies cruzaron las rampas hacia los tres niveles internos del arca. La posterior inundación global cubrió las cumbres montañosas, transformando el paisaje terrestre y dejando al arca flotando a la deriva como el único contenedor de vida y esperanza para el nuevo amanecer.",
     book:"Génesis 6–9",
-    didYouKnow:"Muchas culturas antiguas poseen relatos de inundaciones similares.",
-    image:""
-  },
-  {
-    id:"b3",
-    type:"bible",
-    title:"Moisés y el Mar Rojo",
-    subtitle:"El camino hacia la libertad",
-    content:"Moisés guió al pueblo fuera de Egipto.\n\nFrente al mar parecía no haber salida.\n\nLa travesía marcó uno de los relatos más recordados.",
-    book:"Éxodo 14",
-    didYouKnow:"La ruta exacta todavía genera debates históricos.",
-    image:""
+    didYouKnow:"Las proporciones del arca registradas en las escrituras (300 codos de largo por 50 de ancho) poseen la relación de aspecto exacta utilizada hoy en la ingeniería naval moderna para maximizar la estabilidad en alta mar.",
+    image:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=1200&q=80"
   },
   {
     id:"a1",
     type:"argentina",
     title:"La Revolución de Mayo",
-    subtitle:"El inicio de una transformación",
-    content:"En mayo de 1810 ocurrieron reuniones decisivas.\n\nAquellos acontecimientos dieron origen al Primer Gobierno Patrio.\n\nFue el comienzo de un proceso histórico.",
-    period:"1810",
-    didYouKnow:"La Plaza de Mayo todavía conserva enorme valor histórico.",
-    image:""
+    subtitle:"El amanecer de la libertad en el Río de la Plata",
+    content:"En mayo de 1810, las noticias sobre la caída de la Junta Central de Sevilla a manos de las tropas napoleónicas encendieron la chispa política en Buenos Aires, sumiendo al virreinato en una tensión institucional sin precedentes.\n\nCriollos influyentes exigieron de inmediato la convocatoria a un Cabildo Abierto para discutir la legitimidad del virrey Baltasar Hidalgo de Cisneros, quien ya no contaba con el respaldo de una corona española soberana.\n\nTras días de intensos debates bajo la lluvia, movilizaciones populares en la Plaza Mayor y acaloradas discusiones militares, el 25 de mayo se consolidó la destitución de Cisneros y se anunció la creación del Primer Gobierno Patrio, marcando el inicio irreversible de nuestra emancipación política.",
+    period:"Mayo de 1810",
+    didYouKnow:"El reparto de las famosas escarapelas celestes y blancas por French y Beruti es un mito romántico posterior; en realidad, los manifestantes utilizaban cintas blancas o retratos de Fernando VII para marcar su bando político.",
+    image:"https://images.unsplash.com/photo-1610312289658-9430c6fa4d5f?auto=format&fit=crop&w=1200&q=80"
   },
   {
     id:"a2",
     type:"argentina",
-    title:"Cruce de los Andes",
-    subtitle:"Una expedición histórica",
-    content:"El Ejército de los Andes atravesó montañas extremas.\n\nLa campaña dirigida por San Martín fue una hazaña militar extraordinaria.\n\nCambió el rumbo de Sudamérica.",
-    period:"1817",
-    didYouKnow:"Muchos soldados cruzaron zonas de más de 4000 metros.",
-    image:""
-  },
-  {
-    id:"a3",
-    type:"argentina",
-    title:"Declaración de Independencia",
-    subtitle:"La decisión en Tucumán",
-    content:"Representantes de distintas provincias se reunieron.\n\nLa independencia fue declarada oficialmente.\n\nEse hecho inició una nueva etapa.",
-    period:"1816",
-    didYouKnow:"La Casa de Tucumán se convirtió en símbolo nacional.",
-    image:""
+    title:"El Cruce de los Andes",
+    subtitle:"Una hazaña militar única sobre las cumbres de América",
+    content:"El general José de San Martín planificó minuciosamente una de las maniobras logísticas más complejas y audaces de la historia militar universal para liberar a Chile y asegurar la independencia regional.\n\nDividiendo al Ejército de los Andes en seis columnas simultáneas para confundir por completo a las fuerzas realistas, más de cinco mil hombres avanzaron a través de desfiladeros montañosos extremos superando temperaturas bajo cero.\n\nLa travesía implicó transportar toneladas de artillería pesada y miles de mulas a más de 4000 metros de altura sobre el nivel del mar, una proeza física y estratégica sin igual que coronó con éxito la campaña emancipadora en los llanos de Chacabuco.",
+    period:"Enero de 1817",
+    didYouKnow:"El ejército consumía principalmente 'valdiviano', un alimento compuesto por carne seca desmechada, grasa, agua caliente, cebolla y ají, ideal para combatir el frío extremo y el apunamiento de las alturas.",
+    image:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
   },
   {
     id:"w1",
     type:"world",
     title:"Antiguo Egipto",
-    subtitle:"La tierra de los faraones",
-    content:"Egipto fue una de las civilizaciones más influyentes.\n\nConstruyeron enormes pirámides y desarrollaron conocimientos avanzados.\n\nSu legado continúa fascinando.",
-    period:"Antigüedad",
+    subtitle:"El esplendor eterno en las riberas del Río Nilo",
+    content:"En los márgenes fértiles del Nilo floreció una de las civilizaciones más enigmáticas, duraderas y técnicamente avanzadas que el mundo haya presenciado jamás, unificada bajo el poder absoluto de los faraones.\n\nDesarrollaron complejos sistemas de escritura jeroglífica, técnicas revolucionarias de medicina, canales agrícolas monumentales y una cosmovisión espiritual única centrada en el viaje del alma hacia la vida del más allá.\n\nSu pericia arquitectónica quedó grabada permanentemente en la historia mediante la edificación de templos colosales y las pirámides de Guiza, estructuras construidas con millones de bloques de piedra alineados astronómicamente de forma matemática.",
+    period:"3100 a.C. – 30 a.C.",
     civilization:"Egipto",
-    didYouKnow:"La Gran Pirámide fue la estructura más alta del mundo durante miles de años.",
-    image:""
+    didYouKnow:"La Gran Pirámide de Keops fue la estructura más alta fabricada por el ser humano durante más de 3800 años, hasta que fue superada por la catedral de Lincoln en Inglaterra en el año 1311.",
+    image:"https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=1200&q=80"
   },
   {
     id:"w2",
     type:"world",
-    title:"Imperio Romano",
-    subtitle:"Una civilización inmensa",
-    content:"Roma expandió su influencia durante siglos.\n\nDesarrolló caminos, leyes y ciudades.\n\nSu impacto continúa hasta hoy.",
-    period:"27 a.C.–476 d.C.",
+    title:"El Imperio Romano",
+    subtitle:"La consolidación de un orden universal duradero",
+    content:"En su período de máxima expansión, Roma extendió sus fronteras e influencia cultural sobre tres continentes diferentes, unificando bajo una misma ley y moneda a millones de personas de diversas culturas.\n\nEl éxito imperial radicó en la disciplina militar inquebrantable de sus legiones, complementada por una infraestructura asombrosa que incluía una vasta red de calzadas empedradas y enormes acueductos elevados de hormigón.\n\nSu profundo legado político y legal sentó los cimientos del derecho civil y las instituciones gubernamentales occidentales modernas, mientras que el idioma latín dio origen a las lenguas romances habladas en la actualidad.",
+    period:"27 a.C. – 476 d.C.",
     civilization:"Roma",
-    didYouKnow:"Los romanos construyeron miles de kilómetros de caminos.",
-    image:""
-  },
-  {
-    id:"w3",
-    type:"world",
-    title:"La Gran Muralla China",
-    subtitle:"Una obra monumental",
-    content:"La muralla fue construida durante siglos.\n\nProtegía territorios y rutas.\n\nSe convirtió en uno de los símbolos históricos más conocidos.",
-    period:"Siglos VII a.C.–XVII",
-    civilization:"China",
-    didYouKnow:"No fue construida de una sola vez sino por diferentes dinastías.",
-    image:""
+    didYouKnow:"Los ingenieros romanos inventaron un cemento hidráulico único mezclando ceniza volcánica; este compuesto reaccionaba químicamente con el agua salada, haciendo que sus puertos y muelles se volvieran más fuertes con el paso de los siglos.",
+    image:"https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80"
   }
 ];
 
 var LABELS = {bible:'Escrituras', argentina:'Argentina', world:'El Mundo'};
 
-// ESTADO BASE LIMPIO
 var state = {
   today: {bible:null, argentina:null, world:null},
   favorites: [],
@@ -282,22 +251,19 @@ var state = {
   theme: 'dark'
 };
 
-// LEER CON SEGURIDAD EXTRA (Actualizado a v8 para ignorar datos corruptos viejos)
 try {
-  var sv = JSON.parse(localStorage.getItem('cronicas_v8') || '{}');
+  var sv = JSON.parse(localStorage.getItem('cronicas_v9') || '{}');
   state.favorites = sv.favorites || [];
   state.history   = sv.history   || [];
   state.theme     = sv.theme     || 'dark';
   if (sv.date === new Date().toDateString() && sv.today) {
     state.today = sv.today;
   }
-} catch(e) {
-  console.log("Error leyendo localStorage, usando estado limpio.");
-}
+} catch(e) {}
 
 function save() {
   try {
-    localStorage.setItem('cronicas_v8', JSON.stringify({
+    localStorage.setItem('cronicas_v9', JSON.stringify({
       date: new Date().toDateString(),
       today: state.today,
       favorites: state.favorites,
@@ -307,7 +273,6 @@ function save() {
   } catch(e) {}
 }
 
-// Theme
 if (state.theme === 'light') {
   document.body.classList.add('light');
   document.getElementById('btn-theme').textContent = '☾';
@@ -319,7 +284,6 @@ document.getElementById('btn-theme').addEventListener('click', function() {
   save();
 });
 
-// Fullscreen
 document.getElementById('btn-fullscreen').addEventListener('click', function() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
@@ -328,34 +292,26 @@ document.getElementById('btn-fullscreen').addEventListener('click', function() {
   }
 });
 
-// Date
 var today = new Date();
 var ds = today.toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
 document.getElementById('home-date').textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
 
-// Pick daily story
 function getStory(type) {
   if (state.today && state.today[type]) return state.today[type];
-  
   var pool = ALL_STORIES.filter(function(s) { return s.type === type; });
-  
   if (!pool || pool.length === 0) {
     return {
       id: "error-" + type,
       type: type,
       title: "Próximamente",
       subtitle: "Historia en camino",
-      content: "Contenido no disponible en este momento.",
+      content: "Contenido no disponible.",
       dateGenerated: today.toLocaleDateString('es-AR', {day:'numeric', month:'long', year:'numeric'})
     };
   }
-
   var seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
   var off = {bible:0, argentina:7, world:13};
-  
-  var index = (seed + off[type]) % pool.length;
-  var s = JSON.parse(JSON.stringify(pool[index]));
-  
+  var s = JSON.parse(JSON.stringify(pool[(seed + off[type]) % pool.length]));
   s.dateGenerated = today.toLocaleDateString('es-AR', {day:'numeric', month:'long', year:'numeric'});
   if (!state.today) state.today = {bible:null, argentina:null, world:null};
   state.today[type] = s;
@@ -363,7 +319,6 @@ function getStory(type) {
   return s;
 }
 
-// Navigation helpers
 function showHome() {
   document.getElementById('home-view').style.display = 'flex';
   document.getElementById('section-view').style.display = 'none';
@@ -384,17 +339,14 @@ function showReader() {
   document.body.style.overflow = 'hidden';
 }
 
-// Open section
 function openSection(type) {
   state.section = type;
   var titles = {bible:'✝ Escrituras', argentina:'☽ Argentina', world:'◎ El Mundo', favorites:'♥ Favoritos', history:'◈ Archivo'};
   document.getElementById('section-title').textContent = titles[type] || type;
   showSection();
-
   var content = document.getElementById('section-content');
   if (type === 'favorites') { renderGrid(state.favorites, content, '♡', 'Todavía no guardaste historias.'); return; }
   if (type === 'history')   { renderGrid(dedup(state.history), content, '◈', 'Tu archivo está vacío.'); return; }
-
   var s = getStory(type);
   addToHistory(s);
   renderCard(type, s, content);
@@ -408,11 +360,10 @@ function addToHistory(s) {
   }
 }
 
-// Render story card
 function renderCard(type, s, el) {
   var isFav = state.favorites.some(function(f) { return f.id === s.id; });
-  var excerpt = s.content.substring(0, 260).replace(/\n/g,' ') + '...';
-  var img = s.image ? '<img src="' + s.image + '" alt="" style="width:100%;max-height:280px;object-fit:cover;display:block;border-bottom:1px solid var(--border)" onerror="this.style.display=\'none\'">' : '';
+  var excerpt = s.content.substring(0, 240).replace(/\n/g,' ') + '...';
+  var img = s.image ? '<img src="' + s.image + '" alt="" style="width:100%;max-height:280px;object-fit:cover;display:block;border-bottom:1px solid var(--border)">' : '';
 
   el.innerHTML = '<div class="story-card">' + img +
     '<div class="story-card-inner">' +
@@ -443,17 +394,14 @@ function nextStory(type, el) {
   renderCard(type, s, el);
 }
 
-// Render reader
 function renderReader(s) {
   state.current = s;
   var isFav = state.favorites.some(function(f) { return f.id === s.id; });
   var paras = s.content.split(/\n\n+/).filter(function(p) { return p.trim(); });
   var html = '';
+  
+  // Imprimir párrafos enriquecidos
   paras.forEach(function(p, i) {
-    if (i === 2 && s.image) {
-      html += '<img src="' + s.image + '" alt="" class="reader-inline-img" onerror="this.style.display=\'none\'">';
-      html += '<div class="reader-img-caption">' + s.subtitle + '</div>';
-    }
     html += '<p>' + p.trim() + '</p>';
   });
 
@@ -462,7 +410,9 @@ function renderReader(s) {
   else if (s.period) ref = '<div class="reader-reference"><strong>' + (s.type==='argentina'?'Período Histórico':'Contexto') + '</strong>' + s.period + (s.civilization?' · '+s.civilization:'') + '</div>';
 
   var dyk = s.didYouKnow ? '<div class="did-you-know"><div class="did-you-know-label">¿Sabías que...?</div><p>' + s.didYouKnow + '</p></div>' : '';
-  var hero = s.image ? '<img src="' + s.image + '" alt="" class="reader-hero-img" onerror="this.classList.add(\'hidden\')">' : '';
+  
+  // Imagen de portada principal estéticamente posicionada arriba
+  var hero = s.image ? '<img src="' + s.image + '" alt="" class="reader-hero-img" onerror="this.style.display=\'none\'">' : '';
 
   document.getElementById('reader-body').innerHTML =
     '<div class="reader-category">' + LABELS[s.type] + '</div>' +
@@ -476,7 +426,6 @@ function renderReader(s) {
   showReader();
 }
 
-// Fav toggle
 function toggleFav(type, s) {
   var idx = state.favorites.findIndex(function(f) { return f.id === s.id; });
   if (idx >= 0) { state.favorites.splice(idx, 1); showToast('Eliminado de favoritos'); }
@@ -494,7 +443,6 @@ document.getElementById('reader-fav-btn').addEventListener('click', function() {
   save();
 });
 
-// Grid for favorites / history
 function renderGrid(items, el, icon, msg) {
   if (!items.length) {
     el.innerHTML = '<div class="empty-state"><div class="empty-icon">' + icon + '</div><p>' + msg + '</p></div>';
@@ -530,7 +478,6 @@ function showToast(msg) {
   setTimeout(function(){ t.classList.remove('show'); }, 2600);
 }
 
-// Button events
 document.getElementById('card-bible').addEventListener('click', function(){ openSection('bible'); });
 document.getElementById('card-argentina').addEventListener('click', function(){ openSection('argentina'); });
 document.getElementById('card-world').addEventListener('click', function(){ openSection('world'); });
@@ -543,7 +490,6 @@ document.getElementById('btn-reader-back').addEventListener('click', function(){
   document.body.style.overflow = '';
 });
 
-// PWA Install
 var deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault(); deferredPrompt = e;
@@ -564,7 +510,6 @@ document.getElementById('btn-dismiss').addEventListener('click', function() {
   document.getElementById('install-banner').classList.remove('visible');
 });
 
-// ARRANQUE INMEDIATO DE INTERFAZ COMPLETAMENTE SEGURO
 function initApp() {
   ['bible','argentina','world'].forEach(function(t) {
     try {
@@ -572,7 +517,7 @@ function initApp() {
       var el = document.getElementById('preview-' + t);
       if (el && s) el.textContent = s.title;
     } catch(err) {
-      console.error("Error cargando categoria " + t, err);
+      console.error(err);
     }
   });
   
@@ -581,7 +526,6 @@ function initApp() {
   }
 }
 
-// Ejecutar inmediatamente si el DOM ya cargó, o esperar el evento.
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
