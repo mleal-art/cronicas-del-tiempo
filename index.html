@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0e0c09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Crónicas">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<title>Crónicas del Tiempo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0c09;--bg2:#151210;--surface:#211d18;--border:rgba(180,150,90,0.15);--gold:#c9a84c;--gold2:#e8c97a;--gold3:rgba(201,168,76,0.08);--text:#e8e0d0;--text2:#a89880;--text3:#6e5e4a}
+.light{--bg:#f5f0e8;--bg2:#ede8dc;--surface:#ddd8cc;--border:rgba(120,90,40,0.2);--gold:#8b6420;--gold2:#6b4a10;--gold3:rgba(139,100,32,0.08);--text:#1a1208;--text2:#5a4a30;--text3:#8a7a60}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'EB Garamond',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .4s,color .4s;overflow-x:hidden}
+header{position:relative;text-align:center;padding:44px 24px 26px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,var(--bg2) 0%,transparent 100%)}
+.header-ornament{font-size:10px;letter-spacing:6px;color:var(--gold);font-family:'Cinzel',serif;text-transform:uppercase;margin-bottom:14px;opacity:.65}
+header h1{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(22px,6vw,46px);font-weight:700;color:var(--gold2);letter-spacing:2px;text-shadow:0 0 40px rgba(201,168,76,.25),0 2px 4px rgba(0,0,0,.5);line-height:1.15}
+.header-line{width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto 0}
+.header-controls{position:absolute;top:16px;right:14px;display:flex;gap:7px}
+.btn-icon{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s}
+.btn-icon:active{border-color:var(--gold);color:var(--gold)}
+#home-view{display:flex;flex-direction:column;align-items:center;padding:48px 20px 80px}
+.home-date{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-bottom:40px;text-align:center}
+.home-sections{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;width:100%;max-width:880px}
+.home-card{flex:1;min-width:200px;max-width:250px;background:var(--surface);border:1px solid var(--border);padding:30px 22px 24px;cursor:pointer;transition:all .3s;text-align:center;position:relative;overflow:hidden;-webkit-user-select:none;user-select:none}
+.home-card:active{border-color:rgba(201,168,76,.5);background:#2a2520;transform:scale(0.98)}
+.home-card-icon{font-size:28px;margin-bottom:12px;display:block;color:var(--gold)}
+.home-card-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.home-card-divider{width:26px;height:1px;background:var(--border);margin:0 auto 10px}
+.home-card-preview{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--text2);line-height:1.5;min-height:44px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.home-card-cta{margin-top:16px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
+.bottom-nav{display:flex;justify-content:center;gap:14px;margin-top:44px;flex-wrap:wrap}
+.bottom-nav-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);cursor:pointer;background:none;border:1px solid var(--border);padding:9px 18px;transition:all .2s;display:flex;align-items:center;gap:7px}
+.bottom-nav-btn:active{border-color:var(--gold);color:var(--gold)}
+#section-view{display:none}
+.section-topbar{display:flex;align-items:center;padding:13px 18px;border-bottom:1px solid var(--border);background:var(--bg2);gap:12px;position:sticky;top:0;z-index:50}
+.back-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:6px;padding:8px 0;min-width:60px}
+.section-topbar-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;flex:1;text-align:center}
+.section-content{max-width:860px;margin:0 auto;padding:36px 18px 80px}
+.story-card{background:var(--surface);border:1px solid var(--border);overflow:hidden;margin-bottom:22px}
+.story-card-inner{padding:28px 32px}
+@media(max-width:500px){.story-card-inner{padding:20px 18px}}
+.story-card-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:7px}
+.story-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:3px 9px;border:1px solid var(--border);color:var(--gold)}
+.story-date{font-size:12px;color:var(--text3);font-style:italic}
+.story-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,32px);font-weight:500;color:var(--text);line-height:1.25;margin-bottom:6px}
+.story-subtitle{font-size:14px;color:var(--text2);font-style:italic;margin-bottom:16px}
+.story-excerpt{font-size:16px;line-height:1.82;color:var(--text2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.story-actions{display:flex;gap:9px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);align-items:center;flex-wrap:wrap}
+.btn-read{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:12px 20px;background:transparent;border:1px solid var(--gold);color:var(--gold);cursor:pointer;transition:all .25s}
+.btn-read:active{background:var(--gold);color:var(--bg)}
+.btn-fav{background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;padding:11px 14px;font-size:14px;transition:all .2s}
+.btn-fav.active{border-color:#c0392b;color:#c0392b}
+.btn-new{margin-left:auto;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:11px 14px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer}
+.btn-new:active{border-color:var(--gold);color:var(--gold)}
+#reader-view{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.reader-header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+.reader-back{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text2);cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:6px;padding:8px 0;min-width:60px}
+.reader-progress{font-size:11px;color:var(--text3);font-style:italic}
+.reader-fav-btn{background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;padding:8px 13px;font-size:14px}
+.reader-fav-btn.active{border-color:#c0392b;color:#c0392b}
+.reader-body{max-width:680px;margin:0 auto;padding:52px 24px 100px}
+.reader-category{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.reader-category::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.reader-title{font-family:'Cinzel Decorative','Cormorant Garamond',serif;font-size:clamp(20px,4.5vw,38px);font-weight:700;line-height:1.18;color:var(--text);margin-bottom:12px}
+.reader-subtitle{font-size:16px;color:var(--text2);font-style:italic;margin-bottom:32px;line-height:1.5}
+.reader-hero-img{width:100%;max-height:360px;object-fit:cover;margin-bottom:32px;border:1px solid var(--border);display:block}
+.reader-hero-img.hidden{display:none}
+.reader-content{font-size:18px;line-height:1.92;color:var(--text)}
+.reader-content p{margin-bottom:1.5em;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.reader-content p:first-child::first-letter{font-family:'Cinzel Decorative','Cinzel',serif;font-size:3.8em;float:left;line-height:.8;padding-right:10px;padding-top:8px;color:var(--gold)}
+.reader-inline-img{width:100%;max-height:280px;object-fit:cover;margin:2em 0 .4em;border:1px solid var(--border)}
+.reader-img-caption{font-size:12px;color:var(--text3);text-align:center;font-style:italic;margin-bottom:2em}
+.reader-reference{margin-top:3em;padding:20px 24px;border-left:2px solid var(--gold);background:var(--gold3);font-style:italic;color:var(--text2);font-size:15px}
+.reader-reference strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;display:block;margin-bottom:5px}
+.did-you-know{margin-top:3em;padding:24px;border:1px solid var(--border);background:var(--surface);position:relative}
+.did-you-know::before{content:'✦';position:absolute;top:-10px;left:20px;background:var(--bg);padding:0 8px;color:var(--gold);font-size:12px}
+.did-you-know-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:9px}
+.did-you-know p{font-size:15px;color:var(--text2);font-style:italic;line-height:1.7;margin:0}
+.reader-end-ornament{text-align:center;margin-top:46px;color:var(--text3);font-size:18px;letter-spacing:14px}
+.grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:6px}
+.grid-card{background:var(--surface);border:1px solid var(--border);padding:20px;cursor:pointer;transition:all .25s}
+.grid-card:active{border-color:rgba(201,168,76,.4);background:#2a2520}
+.grid-card-tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:9px}
+.grid-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--text);line-height:1.3;margin-bottom:5px}
+.grid-card-sub{font-size:13px;color:var(--text2);font-style:italic}
+.grid-card-date{font-size:11px;color:var(--text3);margin-top:9px}
+.empty-state{text-align:center;padding:64px 20px;color:var(--text3)}
+.empty-state .empty-icon{font-size:42px;margin-bottom:14px;opacity:.35}
+.empty-state p{font-style:italic;font-size:16px}
+.loading-state{text-align:center;padding:80px 20px;color:var(--text2);font-style:italic;font-size:16px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--gold);color:var(--text);padding:10px 22px;font-size:13px;font-style:italic;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--gold);padding:14px 20px;z-index:500;align-items:center;gap:14px}
+#install-banner.visible{display:flex}
+.install-text{flex:1;font-size:14px;color:var(--text2);font-style:italic}
+.install-text strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:11px}
+.install-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:9px 16px;border:1px solid var(--gold);color:var(--gold);background:none;cursor:pointer}
+.install-dismiss{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-controls">
+    <button class="btn-icon" id="btn-fullscreen">⛶</button>
+    <button class="btn-icon" id="btn-theme">☀</button>
+  </div>
+  <div class="header-ornament">✦ &nbsp; Relatos del Pasado &nbsp; ✦</div>
+  <h1>Crónicas del Tiempo</h1>
+  <div class="header-line"></div>
+</header>
+
+<div id="home-view">
+  <div class="home-date" id="home-date"></div>
+  <div class="home-sections">
+    <div class="home-card" id="card-bible">
+      <span class="home-card-icon">✝</span>
+      <div class="home-card-label">Escrituras</div>
+      <div class="home-card-divider"></div>
+      <div class="home-card-preview" id="preview-bible">Cargando...</div>
+      <div class="home-card-cta">Leer historia →</div>
+    </div>
+    <div class="home-card" id="card-argentina">
+      <span class="home-card-icon">☽</span>
+      <div class="home-card-label">Argentina</div>
+      <div class="home-card-divider"></div>
+      <div class="home-card-preview" id="preview-argentina">Cargando...</div>
+      <div class="home-card-cta">Leer historia →</div>
+    </div>
+    <div class="home-card" id="card-world">
+      <span class="home-card-icon">◎</span>
+      <div class="home-card-label">El Mundo</div>
+      <div class="home-card-divider"></div>
+      <div class="home-card-preview" id="preview-world">Cargando...</div>
+      <div class="home-card-cta">Leer historia →</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="bottom-nav-btn" id="btn-fav-nav">♥ Favoritos</button>
+    <button class="bottom-nav-btn" id="btn-hist-nav">◈ Archivo</button>
+  </div>
+</div>
+
+<div id="section-view">
+  <div class="section-topbar">
+    <button class="back-btn" id="btn-back">← Volver</button>
+    <div class="section-topbar-title" id="section-title"></div>
+    <div style="width:56px"></div>
+  </div>
+  <div class="section-content" id="section-content"></div>
+</div>
+
+<div id="reader-view">
+  <div class="reader-header">
+    <button class="reader-back" id="btn-reader-back">← VOLVER</button>
+    <span class="reader-progress" id="reader-progress"></span>
+    <button class="reader-fav-btn" id="reader-fav-btn">♥</button>
+  </div>
+  <div class="reader-body" id="reader-body"></div>
+</div>
+
+<div id="install-banner">
+  <div class="install-text"><strong>Instalar app</strong><br>Agregá Crónicas a tu pantalla de inicio</div>
+  <button class="install-btn" id="install-btn">Instalar</button>
+  <button class="install-dismiss" id="btn-dismiss">✕</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="stories.js"></script>
+<script>
+var LABELS = {bible:'Escrituras', argentina:'Argentina', world:'El Mundo'};
+
+var state = {
+  today: {bible:null, argentina:null, world:null},
+  favorites: [],
+  history: [],
+  current: null,
+  section: null,
+  theme: 'dark'
+};
+
+try {
+  var sv = JSON.parse(localStorage.getItem('cronicas_v7') || '{}');
+  state.favorites = sv.favorites || [];
+  state.history   = sv.history   || [];
+  state.theme     = sv.theme     || 'dark';
+  if (sv.date === new Date().toDateString()) {
+    state.today = sv.today || state.today;
+  }
+} catch(e) {}
+
+function save() {
+  try {
+    localStorage.setItem('cronicas_v7', JSON.stringify({
+      date: new Date().toDateString(),
+      today: state.today,
+      favorites: state.favorites,
+      history: state.history,
+      theme: state.theme
+    }));
+  } catch(e) {}
+}
+
+// Theme
+if (state.theme === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('btn-theme').textContent = '☾';
+}
+document.getElementById('btn-theme').addEventListener('click', function() {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  document.body.classList.toggle('light');
+  document.getElementById('btn-theme').textContent = state.theme === 'light' ? '☾' : '☀';
+  save();
+});
+
+// Fullscreen
+document.getElementById('btn-fullscreen').addEventListener('click', function() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
+});
+
+// Date
+var today = new Date();
+var ds = today.toLocaleDateString('es-AR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+document.getElementById('home-date').textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
+
+// Pick daily story (CORREGIDO)
+function getStory(type) {
+  if (state.today[type]) return state.today[type];
+  
+  var pool = ALL_STORIES.filter(function(s) { return s.type === type; });
+  
+  if (!pool || pool.length === 0) {
+    return {
+      id: "error-" + type,
+      type: type,
+      title: "Próximamente",
+      subtitle: "Historia en camino",
+      content: "Contenido no disponible en este momento.",
+      dateGenerated: today.toLocaleDateString('es-AR', {day:'numeric', month:'long', year:'numeric'})
+    };
+  }
+
+  var seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+  var off = {bible:0, argentina:7, world:13};
+  
+  var index = (seed + off[type]) % pool.length;
+  var s = JSON.parse(JSON.stringify(pool[index]));
+  
+  s.dateGenerated = today.toLocaleDateString('es-AR', {day:'numeric', month:'long', year:'numeric'});
+  state.today[type] = s;
+  save();
+  return s;
+}
+
+// Navigation helpers
+function showHome() {
+  document.getElementById('home-view').style.display = 'flex';
+  document.getElementById('section-view').style.display = 'none';
+  document.getElementById('reader-view').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function showSection() {
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('section-view').style.display = 'block';
+  document.getElementById('reader-view').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function showReader() {
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('section-view').style.display = 'none';
+  document.getElementById('reader-view').style.display = 'block';
+  document.getElementById('reader-view').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+// Open section
+function openSection(type) {
+  state.section = type;
+  var titles = {bible:'✝ Escrituras', argentina:'☽ Argentina', world:'◎ El Mundo', favorites:'♥ Favoritos', history:'◈ Archivo'};
+  document.getElementById('section-title').textContent = titles[type] || type;
+  showSection();
+
+  var content = document.getElementById('section-content');
+  if (type === 'favorites') { renderGrid(state.favorites, content, '♡', 'Todavía no guardaste historias.'); return; }
+  if (type === 'history')   { renderGrid(dedup(state.history), content, '◈', 'Tu archivo está vacío.'); return; }
+
+  var s = getStory(type);
+  addToHistory(s);
+  renderCard(type, s, content);
+}
+
+function addToHistory(s) {
+  if (!state.history.find(function(h) { return h.id === s.id; })) {
+    state.history.unshift(s);
+    if (state.history.length > 60) state.history = state.history.slice(0, 60);
+    save();
+  }
+}
+
+// Render story card
+function renderCard(type, s, el) {
+  var isFav = state.favorites.some(function(f) { return f.id === s.id; });
+  var excerpt = s.content.substring(0, 260).replace(/
+/g,' ') + '...';
+  var img = s.image ? '<img src="' + s.image + '" alt="" style="width:100%;max-height:280px;object-fit:cover;display:block;border-bottom:1px solid var(--border)" onerror="this.style.display='none'">' : '';
+
+  el.innerHTML = '<div class="story-card">' + img +
+    '<div class="story-card-inner">' +
+    '<div class="story-card-meta"><span class="story-tag">' + LABELS[type] + '</span><span class="story-date">' + (s.dateGenerated||'') + '</span></div>' +
+    '<div class="story-title">' + s.title + '</div>' +
+    '<div class="story-subtitle">' + s.subtitle + '</div>' +
+    '<div class="story-excerpt">' + excerpt + '</div>' +
+    '<div class="story-actions">' +
+    '<button class="btn-read" id="do-read">Leer Historia</button>' +
+    '<button class="btn-fav' + (isFav?' active':'') + '" id="do-fav">♥</button>' +
+    '<button class="btn-new" id="do-next">↻ Siguiente</button>' +
+    '</div></div></div>';
+
+  document.getElementById('do-read').onclick = function() { renderReader(s); };
+  document.getElementById('do-fav').onclick  = function() { toggleFav(type, s); };
+  document.getElementById('do-next').onclick = function() { nextStory(type, el); };
+}
+
+function nextStory(type, el) {
+  var pool = ALL_STORIES.filter(function(s) { return s.type === type; });
+  var cur  = state.today[type];
+  var idx  = pool.findIndex(function(s) { return s.id === cur.id; });
+  var s    = JSON.parse(JSON.stringify(pool[(idx+1) % pool.length]));
+  s.dateGenerated = today.toLocaleDateString('es-AR', {day:'numeric', month:'long', year:'numeric'});
+  state.today[type] = s;
+  addToHistory(s);
+  save();
+  renderCard(type, s, el);
+}
+
+// Render reader
+function renderReader(s) {
+  state.current = s;
+  var isFav = state.favorites.some(function(f) { return f.id === s.id; });
+  var paras = s.content.split(/
+
++/).filter(function(p) { return p.trim(); });
+  var html = '';
+  paras.forEach(function(p, i) {
+    if (i === 2 && s.image) {
+      html += '<img src="' + s.image + '" alt="" class="reader-inline-img" onerror="this.style.display='none'">';
+      html += '<div class="reader-img-caption">' + s.subtitle + '</div>';
+    }
+    html += '<p>' + p.trim() + '</p>';
+  });
+
+  var ref = '';
+  if (s.book) ref = '<div class="reader-reference"><strong>Referencia Bíblica</strong>' + s.book + '</div>';
+  else if (s.period) ref = '<div class="reader-reference"><strong>' + (s.type==='argentina'?'Período Histórico':'Contexto') + '</strong>' + s.period + (s.civilization?' · '+s.civilization:'') + '</div>';
+
+  var dyk = s.didYouKnow ? '<div class="did-you-know"><div class="did-you-know-label">¿Sabías que...?</div><p>' + s.didYouKnow + '</p></div>' : '';
+  var hero = s.image ? '<img src="' + s.image + '" alt="" class="reader-hero-img" onerror="this.classList.add('hidden')">' : '';
+
+  document.getElementById('reader-body').innerHTML =
+    '<div class="reader-category">' + LABELS[s.type] + '</div>' +
+    '<h1 class="reader-title">' + s.title + '</h1>' +
+    '<div class="reader-subtitle">' + s.subtitle + '</div>' +
+    hero + '<div class="reader-content">' + html + '</div>' + ref + dyk +
+    '<div class="reader-end-ornament">✦ ✦ ✦</div>';
+
+  document.getElementById('reader-fav-btn').className = 'reader-fav-btn' + (isFav?' active':'');
+  document.getElementById('reader-progress').textContent = s.dateGenerated || '';
+  showReader();
+}
+
+// Fav toggle
+function toggleFav(type, s) {
+  var idx = state.favorites.findIndex(function(f) { return f.id === s.id; });
+  if (idx >= 0) { state.favorites.splice(idx, 1); showToast('Eliminado de favoritos'); }
+  else          { state.favorites.unshift(s);      showToast('Guardado en favoritos ♥'); }
+  save();
+  renderCard(type, s, document.getElementById('section-content'));
+}
+
+document.getElementById('reader-fav-btn').addEventListener('click', function() {
+  if (!state.current) return;
+  var s = state.current;
+  var idx = state.favorites.findIndex(function(f) { return f.id === s.id; });
+  if (idx >= 0) { state.favorites.splice(idx, 1); this.className='reader-fav-btn'; showToast('Eliminado de favoritos'); }
+  else          { state.favorites.unshift(s); this.className='reader-fav-btn active'; showToast('Guardado en favoritos ♥'); }
+  save();
+});
+
+// Grid for favorites / history
+function renderGrid(items, el, icon, msg) {
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">' + icon + '</div><p>' + msg + '</p></div>';
+    return;
+  }
+  var cards = items.map(function(s) {
+    return '<div class="grid-card" data-id="' + s.id + '">' +
+      '<div class="grid-card-tag">' + (LABELS[s.type]||s.type) + '</div>' +
+      '<div class="grid-card-title">' + s.title + '</div>' +
+      '<div class="grid-card-sub">' + (s.subtitle||'') + '</div>' +
+      '<div class="grid-card-date">' + (s.dateGenerated||'') + '</div></div>';
+  });
+  el.innerHTML = '<div class="grid-view">' + cards.join('') + '</div>';
+  el.querySelectorAll('.grid-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      var s = state.favorites.find(function(f){return f.id===id;}) ||
+              state.history.find(function(h){return h.id===id;}) ||
+              ALL_STORIES.find(function(x){return x.id===id;});
+      if (s) renderReader(s);
+    });
+  });
+}
+
+function dedup(arr) {
+  return arr.filter(function(s,i,a){ return a.findIndex(function(x){return x.id===s.id;})===i; });
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+
+// Button events
+document.getElementById('card-bible').addEventListener('click', function(){ openSection('bible'); });
+document.getElementById('card-argentina').addEventListener('click', function(){ openSection('argentina'); });
+document.getElementById('card-world').addEventListener('click', function(){ openSection('world'); });
+document.getElementById('btn-fav-nav').addEventListener('click', function(){ openSection('favorites'); });
+document.getElementById('btn-hist-nav').addEventListener('click', function(){ openSection('history'); });
+document.getElementById('btn-back').addEventListener('click', showHome);
+document.getElementById('btn-reader-back').addEventListener('click', function(){
+  document.getElementById('reader-view').style.display = 'none';
+  document.getElementById('section-view').style.display = 'block';
+  document.body.style.overflow = '';
+});
+
+// PWA Install
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault(); deferredPrompt = e;
+  if (!localStorage.getItem('install_dismissed'))
+    document.getElementById('install-banner').classList.add('visible');
+});
+document.getElementById('install-btn').addEventListener('click', function() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r) {
+    deferredPrompt = null;
+    document.getElementById('install-banner').classList.remove('visible');
+    if (r.outcome === 'accepted') showToast('¡App instalada!');
+  });
+});
+document.getElementById('btn-dismiss').addEventListener('click', function() {
+  localStorage.setItem('install_dismissed','1');
+  document.getElementById('install-banner').classList.remove('visible');
+});
+
+// Init previews seguro cuando el DOM esté listo
+window.addEventListener('DOMContentLoaded', function() {
+  ['bible','argentina','world'].forEach(function(t) {
+    var s = getStory(t);
+    var el = document.getElementById('preview-' + t);
+    if (el) el.textContent = s.title;
+  });
+  
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+});
+</script>
+</body>
+</html>
