@@ -174,7 +174,6 @@ header h1{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(22px,6v
 <div class="toast" id="toast"></div>
 
 <script>
-// HISTORIAS INTEGRADAS DIRECTAMENTE PARA EVITAR ERRORES DE CARGA LOCAL (CORS)
 var ALL_STORIES = [
   {
     id:"b1",
@@ -273,6 +272,7 @@ var ALL_STORIES = [
 
 var LABELS = {bible:'Escrituras', argentina:'Argentina', world:'El Mundo'};
 
+// ESTADO BASE LIMPIO
 var state = {
   today: {bible:null, argentina:null, world:null},
   favorites: [],
@@ -282,19 +282,22 @@ var state = {
   theme: 'dark'
 };
 
+// LEER CON SEGURIDAD EXTRA (Actualizado a v8 para ignorar datos corruptos viejos)
 try {
-  var sv = JSON.parse(localStorage.getItem('cronicas_v7') || '{}');
+  var sv = JSON.parse(localStorage.getItem('cronicas_v8') || '{}');
   state.favorites = sv.favorites || [];
   state.history   = sv.history   || [];
   state.theme     = sv.theme     || 'dark';
-  if (sv.date === new Date().toDateString()) {
-    state.today = sv.today || state.today;
+  if (sv.date === new Date().toDateString() && sv.today) {
+    state.today = sv.today;
   }
-} catch(e) {}
+} catch(e) {
+  console.log("Error leyendo localStorage, usando estado limpio.");
+}
 
 function save() {
   try {
-    localStorage.setItem('cronicas_v7', JSON.stringify({
+    localStorage.setItem('cronicas_v8', JSON.stringify({
       date: new Date().toDateString(),
       today: state.today,
       favorites: state.favorites,
@@ -332,7 +335,7 @@ document.getElementById('home-date').textContent = ds.charAt(0).toUpperCase() + 
 
 // Pick daily story
 function getStory(type) {
-  if (state.today[type]) return state.today[type];
+  if (state.today && state.today[type]) return state.today[type];
   
   var pool = ALL_STORIES.filter(function(s) { return s.type === type; });
   
@@ -354,6 +357,7 @@ function getStory(type) {
   var s = JSON.parse(JSON.stringify(pool[index]));
   
   s.dateGenerated = today.toLocaleDateString('es-AR', {day:'numeric', month:'long', year:'numeric'});
+  if (!state.today) state.today = {bible:null, argentina:null, world:null};
   state.today[type] = s;
   save();
   return s;
@@ -560,18 +564,29 @@ document.getElementById('btn-dismiss').addEventListener('click', function() {
   document.getElementById('install-banner').classList.remove('visible');
 });
 
-// Inicialización segura de la interfaz
-window.addEventListener('DOMContentLoaded', function() {
+// ARRANQUE INMEDIATO DE INTERFAZ COMPLETAMENTE SEGURO
+function initApp() {
   ['bible','argentina','world'].forEach(function(t) {
-    var s = getStory(t);
-    var el = document.getElementById('preview-' + t);
-    if (el) el.textContent = s.title;
+    try {
+      var s = getStory(t);
+      var el = document.getElementById('preview-' + t);
+      if (el && s) el.textContent = s.title;
+    } catch(err) {
+      console.error("Error cargando categoria " + t, err);
+    }
   });
   
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function(){});
   }
-});
+}
+
+// Ejecutar inmediatamente si el DOM ya cargó, o esperar el evento.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 </script>
 </body>
 </html>
